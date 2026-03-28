@@ -3,7 +3,6 @@
 import pool from "./db";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
-import { prisma } from "./prisma";
 
 export const getAdmin = async () => {
 
@@ -20,19 +19,12 @@ export const getAdmin = async () => {
         const decoded = jwt.verify(adminToken, SECRET) as { id: number };
         const adminId = decoded.id;
 
-        /*const { rows } = await pool.query(
+        const { rows } = await pool.query(
             "SELECT username, email, role FROM admin WHERE id = $1",
             [adminId]
-        )*/
+        )
 
-        const admin = await prisma.admin.findUnique({
-            where: {id: adminId},
-            select: {
-                username: true,
-                email: true,
-                role: true
-            }
-        });
+        const admin = rows[0];
 
         if (!admin || admin.role !== "admin") {
             return null;

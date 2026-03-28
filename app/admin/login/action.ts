@@ -1,6 +1,6 @@
 'use server'
 
-import { prisma } from "@/lib/prisma";
+import pool from "@/lib/db";
 import { compare } from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
@@ -27,12 +27,14 @@ export async function SubmitForm(prevState: any, formData: FormData):  Promise<F
 
     try {
 
-        const admin = await prisma.admin.findUnique({
-            where: {username: username}
-        });
+        const { rows } = await pool.query(
+            "SELECT * FROM admin WHERE username = $1",
+            [username]
+        )
 
+        const admin = rows[0];
 
-        if (!admin) {
+        if (!admin || admin.length === 0) {
             return {
                 success: false,
                 message: "admin does not exists"

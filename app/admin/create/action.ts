@@ -1,6 +1,6 @@
 'use server'
 
-import { prisma } from "@/lib/prisma";
+import pool from "@/lib/db";
 import { hash } from "bcryptjs";
 
 type FormState = {
@@ -22,19 +22,13 @@ export async function SubmitForm(prevState:any, formData: FormData): Promise<For
     }
 
     try {
+
+        const { rows } = await pool.query(
+            "SELECT username, email FROM admin WHERE username = $1 OR email = $2",
+            [username, email]
+        )
         
-        const existingAdmin = await prisma.admin.findFirst({
-            where: {
-                 OR: [
-                    { username: username },
-                    { email: email}
-                ]
-            },
-            select: {
-                username: true,
-                email: true
-            }
-        });
+        const existingAdmin = rows[0];
 
         if (existingAdmin?.username === username && existingAdmin?.email === email) {
              return {
@@ -53,13 +47,10 @@ export async function SubmitForm(prevState:any, formData: FormData): Promise<For
 
         const hashPassword = await hash(password, 10);
 
-        await prisma.admin.create({
-            data: {
-                username: username,
-                email: email,
-                password: hashPassword
-            }
-        });
+        await pool.query(
+            "INSERT INTO admin (username, email, password) VALUES ($1, $2, $3)",
+            [username, email, hashPassword]
+        )
 
         return {
             message: "account created successfully",

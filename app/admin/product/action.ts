@@ -1,32 +1,19 @@
 'use server'
 
 import pool from "@/lib/db";
-import { prisma } from "@/lib/prisma";
 import fs from "fs";
 import path from "path";
 
 
 export async function fetchProducts(category: string) {
     try {
+
+        const { rows } = await pool.query(
+            "SELECT * FROM products WHERE category = $1",
+            [category]
+        )
         
-        const result = await prisma.products.findMany({
-            where: { category: category},
-            select: {
-                id: true,
-                category: true,
-                image: true,
-                name: true,
-                description: true,
-                price: true,
-                stock: true
-            }
-        });
-
-        const formatted = result.map((p:any) => (
-            {...p, price: Number(p.price)}
-        ))
-
-        return formatted;
+        return rows;
 
     } catch (err) {
         console.error(err)
@@ -36,12 +23,10 @@ export async function fetchProducts(category: string) {
 export async function addStock(productId : number) {
     try {
 
-        await prisma.products.update({
-            where: {id: productId},
-            data: {
-                stock: {increment: 1}
-            }
-        })
+        await pool.query(
+            "UPDATE products SET stock = stock + 1 WHERE id = $1",
+            [productId]
+        )
 
         return;
     } catch (err) {
@@ -52,12 +37,12 @@ export async function addStock(productId : number) {
 export async function deleteProduct(productId : number) {
     try {
 
-        const imageUrl = await prisma.products.findUnique({
-            where: {id: productId},
-            select: {
-                image:true
-            }
-        });
+        const { rows } = await pool.query(
+            "SELECT image FROM products WHERE id = $1",
+            [productId]
+        )
+
+        const imageUrl = rows[0].image;
 
         if (imageUrl?.image) {
 
@@ -68,12 +53,12 @@ export async function deleteProduct(productId : number) {
         }
         }
 
-        await prisma.products.delete({
-            where: {id: productId}
-        })
+        await pool.query("DELETE FROM products WHERE id = $1", [productId]);
 
-
-        return { success: true };
+        return { 
+            success: true 
+        };
+        
     } catch (err) {
         console.error(err)
     }

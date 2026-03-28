@@ -1,7 +1,6 @@
 'use server'
 
 import pool from "@/lib/db";
-import { prisma } from "@/lib/prisma";
 import fs from "fs";
 import path from "path";
 
@@ -58,15 +57,10 @@ export async function createProduct(prevData: any, formData: FormData): Promise<
 
     try {
 
-        await prisma.products.create({
-            data: {
-                category: category,
-                image: imageUrl,
-                name: name,
-                description: description,
-                price: price
-            }
-        });
+        await pool.query(
+            "INSERT INTO products (category, image, name, description, price) VALUES ($1, $2, $3, $4, $5)",
+            [category, imageUrl, name, description, price]
+        )
 
         return {
             success: true,
