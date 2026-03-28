@@ -4,9 +4,13 @@ import { useActionState, useEffect } from "react"
 import { SubmitForm } from "./action"
 import { useRouter } from "next/navigation"
 
-const initialState = {
+type FormState = {
+  message: string;
+  success: boolean;
+};
+
+const initialState:FormState = {
     message: "",
-    error: "",
     success: false
 }
 
@@ -49,7 +53,6 @@ export default function Form() {
             </button>
         </form>
 
-        {state && <p>{state?.error}</p>}
         {state && <p>{state?.message}</p>}
         </div>
     )

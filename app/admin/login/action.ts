@@ -5,7 +5,12 @@ import { compare } from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
-export async function SubmitForm(prevState: any, formData: FormData) {
+type FormState = {
+  message: string;
+  success: boolean;
+};
+
+export async function SubmitForm(prevState: any, formData: FormData):  Promise<FormState> {
 
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
@@ -15,7 +20,8 @@ export async function SubmitForm(prevState: any, formData: FormData) {
 
     if (!username || !password) {
         return {
-            error: "complete both fields to continue"
+            success: false,
+            message: "complete both fields to continue"
         }
     }
 
@@ -28,7 +34,8 @@ export async function SubmitForm(prevState: any, formData: FormData) {
 
         if (!admin) {
             return {
-                error: "admin does not exists"
+                success: false,
+                message: "admin does not exists"
             }
         }
 
@@ -36,7 +43,8 @@ export async function SubmitForm(prevState: any, formData: FormData) {
 
         if (!matchPassword) {
             return {
-                error: "invalid password"
+                success: false,
+                message: "invalid password"
             }
         }
 
@@ -61,7 +69,8 @@ export async function SubmitForm(prevState: any, formData: FormData) {
 
     } catch (err) {
         return {
-            error: "something went wrong"
+            success: false,
+            message: "something went wrong"
         }
     }
 }

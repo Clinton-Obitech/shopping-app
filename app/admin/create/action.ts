@@ -3,7 +3,12 @@
 import { prisma } from "@/lib/prisma";
 import { hash } from "bcryptjs";
 
-export async function SubmitForm(prevState:any, formData: FormData) {
+type FormState = {
+  message: string;
+  success: boolean;
+};
+
+export async function SubmitForm(prevState:any, formData: FormData): Promise<FormState> {
 
     const username = formData.get("username") as string;
     const email = formData.get("email") as string;
@@ -11,7 +16,8 @@ export async function SubmitForm(prevState:any, formData: FormData) {
 
     if (!username || !email || !password) {
         return {
-            error: "complete all fields"
+            success: false,
+            message: "complete all fields"
         }
     }
 
@@ -62,7 +68,8 @@ export async function SubmitForm(prevState:any, formData: FormData) {
 
     } catch (err) {
         return {
-            error: "something went wrong"
+            success: false,
+            message: "something went wrong"
         }
     }
 }
