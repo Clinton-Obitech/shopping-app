@@ -22,7 +22,7 @@ export async function fetchProducts(category: string) {
             }
         });
 
-        const formatted = result.map(p => (
+        const formatted = result.map((p:any) => (
             {...p, price: Number(p.price)}
         ))
 
