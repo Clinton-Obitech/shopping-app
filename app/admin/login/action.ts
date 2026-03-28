@@ -1,7 +1,7 @@
 'use server'
 
 import { prisma } from "@/lib/prisma";
-import { compare } from "bcrypt";
+import { compare } from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
