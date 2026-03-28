@@ -1,0 +1,219 @@
+main.admin {
+    padding: 1rem;
+    text-align: center;
+}
+
+main.admin nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+main.admin h1 {
+    padding: 5rem 0;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin-bottom: 2rem;
+}
+
+.admin nav a {
+    padding: 0.7rem;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    width: 90%;
+    color: white;
+}
+
+.login, .create {
+    padding: 1rem;
+}
+
+.login h1, .create h1 {
+    margin-bottom: 1rem;
+}
+
+.login form, .create form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.login form button, .create form button {
+    padding: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    align-self: flex-start;
+    width: 50%;
+}
+
+.login form input, .create form input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+main.dashboard .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+.card nav {
+    align-self: flex-end;
+}
+
+section.products {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+section.products button {
+    background-color: rgba(0, 0, 0, 0.8);
+    margin: 0.3rem;
+    padding: 0.3rem 0.7rem;
+    color: white;
+}
+
+section.products ul img {
+    width: 100%;
+    height: 150px;
+    border-radius: 5px;
+}
+
+section.products ul {
+    list-style-type: none;
+}
+
+section.products ul div {
+    box-shadow: 0px 0px 2px black;
+    border-radius: 5px;
+    padding: 0.3rem;
+}
+
+main.product {
+    padding: 1rem;
+}
+
+main.product .query {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+main.product .query select {
+    padding: 0.4rem 1rem;
+    border: none;
+    border: 1.5px solid black;
+    border-radius: 5px;
+    color: black;
+    text-transform: capitalize;
+}
+
+main.product .query button {
+    padding: 0.4rem 1rem;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 5px;
+    color: white;
+}
+
+main.product nav a {
+    padding: 1rem 2rem;
+    margin: 1rem 0;
+    display: inline-block;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 5px;
+}
+
+main.product .noProducts {
+    padding: 5rem 0;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    color: black;
+    grid-column: span 2;
+    text-transform: capitalize;
+}
+
+main.dashboard section.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+} 
+
+main.dashboard section.top button {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 0.3rem 1rem;
+    color: white;
+
+}
+
+main.createProduct form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+main.createProduct form input {
+    width: 90%;
+    padding: 0.4rem;
+    font-size: 1rem;
+    border: 1.5px solid black;
+    border-radius: 5px;
+}
+
+main.createProduct form select {
+    padding: 0.4rem 2rem;
+    text-transform: capitalize;
+    border: 1.5px solid black;
+    border-radius: 5px;
+}
+
+main.createProduct form input[type=file] {
+    display: none;
+}
+
+main.createProduct form button {
+    padding: 0.5rem 2rem;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+main.createProduct form label i {
+    font-size: 1.5rem;
+}
+
+main.createProduct form label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+main.createProduct p {
+    text-align: center;
+}
+
+main.createProduct {
+    padding: 1rem;
+}
