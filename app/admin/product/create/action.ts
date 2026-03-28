@@ -5,7 +5,12 @@ import { prisma } from "@/lib/prisma";
 import fs from "fs";
 import path from "path";
 
-export async function createProduct(prevData: any, formData: FormData) {
+type FormState = {
+  message: string;
+  success: boolean;
+};
+
+export async function createProduct(prevData: any, formData: FormData): Promise<FormState> {
 
     const category = formData.get("category") as string;
     const image = formData.get("image") as File;
@@ -15,13 +20,15 @@ export async function createProduct(prevData: any, formData: FormData) {
 
     if (!category || !name || !description || !price) {
         return {
-            error: "complete all fields to continue"
+            success: false,
+            message: "complete all fields to continue"
         }
     }
 
     if (!image || image.size === 0) {
         return {
-            error: "image is required"
+            success: false,
+            message: "image is required"
         }
     }
 
@@ -62,13 +69,15 @@ export async function createProduct(prevData: any, formData: FormData) {
         });
 
         return {
+            success: true,
             message: "product created"
         }
 
     } catch (err) {
         console.error(err);
         return {
-            error: "something went wrong"
+            success: false,
+            message: "something went wrong"
         }
     }
 }

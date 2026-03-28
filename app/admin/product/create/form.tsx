@@ -4,8 +4,12 @@ import { createProduct } from "./action";
 import { useActionState, useState } from "react";
 import { SelectCategory } from "../../components/select";
 
-const initialState =  {
-    error: "",
+type FormState = {
+  message: string;
+  success: boolean;
+};
+
+const initialState:FormState =  {
     message: "",
     success: false
 }
@@ -57,7 +61,6 @@ export default function Form() {
             </button>
         </form>
 
-        {state && <p>{state?.error}</p>}
         {state && <p>{state?.message}</p>}
         </>
     )
