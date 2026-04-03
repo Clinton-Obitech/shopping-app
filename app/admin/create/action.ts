@@ -1,6 +1,6 @@
 'use server'
 
-import pool from "@/lib/db";
+import supabase from "@/lib/supabaseServer";
 import { hash } from "bcryptjs";
 
 type FormState = {
@@ -23,12 +23,15 @@ export async function SubmitForm(prevState:any, formData: FormData): Promise<For
 
     try {
 
-        const { rows } = await pool.query(
-            "SELECT username, email FROM admin WHERE username = $1 OR email = $2",
-            [username, email]
-        )
-        
-        const existingAdmin = rows[0];
+        const { data: existingAdmin, error: existingError } = await supabase
+        .from('admin')
+        .select('username, email')
+        .or(`username.eq.${username}, email.eq.${email}`)
+        .single();
+
+        if (existingError) {
+            console.log(existingError)
+        }
 
         if (existingAdmin?.username === username && existingAdmin?.email === email) {
              return {
@@ -47,10 +50,19 @@ export async function SubmitForm(prevState:any, formData: FormData): Promise<For
 
         const hashPassword = await hash(password, 10);
 
-        await pool.query(
-            "INSERT INTO admin (username, email, password) VALUES ($1, $2, $3)",
-            [username, email, hashPassword]
-        )
+        const { data, error: insertError } = await supabase
+        .from('admin')
+        .insert([
+            {
+                username: username,
+                email: email,
+                password: hashPassword
+            }
+        ]);
+
+        if (insertError) {
+            console.error(insertError)
+        }
 
         return {
             message: "account created successfully",

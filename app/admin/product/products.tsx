@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { addStock } from "./action";
+import { RemoveStock } from "./action";
 import { deleteProduct } from "./action";
 import { fetchProducts } from "./action";
 import { SelectCategory } from "../components/select";
@@ -46,8 +47,8 @@ export default function ManageProducts() {
         <section className={styles.query}>
         <select name="category" onChange={HandleChange}>
             <option>choose category</option>
-            {SelectCategory.map(option => (
-                <option key={option.id} value={option.value}>{option.label}</option>
+            {SelectCategory.map(category => (
+                <option key={category.id} value={category.value}>{category.label}</option>
             ))}
         </select>
         <button onClick={() => getProducts(select)}>see products</button>
@@ -56,16 +57,15 @@ export default function ManageProducts() {
         <section className={styles.products}>
         {products.length > 0 ? (
         
-            products.map(p => (
+        products.map(p => (
             <ul key={p.id}>
-                <img src={p.image} />
+                <img src={p.imageUrl} />
                 <div>
                 <li>{p.name}</li>
                 <li>price: ${p.price}</li>
                 <li>stock: {p.stock}</li>
                 </div>
                 <button 
-                style={{backgroundColor: "navy"}}
                 type="button"
                 onClick={() => { 
                     addStock(p.id as number);
@@ -73,16 +73,26 @@ export default function ManageProducts() {
                 }
                 }
                 >
-                    add stock
+                    <i className="fa-solid fa-circle-plus"></i>
+                </button>
+
+                <button 
+                type="button"
+                onClick={() => { 
+                    RemoveStock(p.id as number);
+                    getProducts(select);
+                }
+                }
+                >
+                <i className="fa-solid fa-circle-minus"></i>
                 </button>
 
                 <button
-                style={{backgroundColor: "red"}}
                 onClick={() => {
                     removeProduct(p.id);
                 }}
                 type="button">
-                    delete
+                    <i className="fa-solid fa-circle-xmark"></i>
                 </button>
             </ul>
         ))

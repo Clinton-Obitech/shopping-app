@@ -1,6 +1,7 @@
 'use server'
 
 import pool from "./db";
+import supabase from "./supabaseServer";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 
@@ -19,14 +20,15 @@ export const getAdmin = async () => {
         const decoded = jwt.verify(adminToken, SECRET) as { id: number };
         const adminId = decoded.id;
 
-        const { rows } = await pool.query(
-            "SELECT username, email, role FROM admin WHERE id = $1",
-            [adminId]
-        )
+       const { data: admin } = await supabase
+       .from('admin')
+       .select('*')
+       .eq('id', adminId)
+       .single();
 
-        const admin = rows[0];
+       console.log(admin)
 
-        if (!admin || admin.role !== "admin") {
+        if (!admin || admin.role!== "admin") {
             return null;
         }
 

@@ -1,6 +1,7 @@
 'use server'
 
 import pool from "@/lib/db";
+import supabase from "@/lib/supabaseServer";
 import fs from "fs";
 import path from "path";
 
@@ -24,43 +25,31 @@ export async function createProduct(prevData: any, formData: FormData): Promise<
         }
     }
 
-    if (!image || image.size === 0) {
-        return {
-            success: false,
-            message: "image is required"
-        }
-    }
-
-    //convert file
-    const bytes = await image.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    //unique filename
-    const filename = `${Date.now()}-${image.name.replace(/\s+/g, "-")}`;
-
-    //upload directory
-    const uploadDir = path.join(process.cwd(), "public/uploads");
-
-    //ensure folder exists
-    if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true})
-    }
-
-    //full file path
-    const filepath = path.join(uploadDir, filename);
-
-    //save file
-    fs.writeFileSync(filepath, buffer);
-
-    //path to store in db
-    const imageUrl = `/uploads/${filename}`;
-
     try {
 
-        await pool.query(
-            "INSERT INTO products (category, image, name, description, price) VALUES ($1, $2, $3, $4, $5)",
-            [category, imageUrl, name, description, price]
-        )
+        const fileName = `${Date.now()}-${image.name}`;
+
+        const { error: uploadError } = await supabase.storage
+        .from('products')
+        .upload(fileName, image);
+
+        if (uploadError) {
+            console.error(uploadError)
+        }
+
+        const { error: insertError } = await supabase
+        .from('products')
+        .insert([{
+            category: category,
+            image: fileName,
+            name: name,
+            description: description,
+            price: price
+        }]);
+
+        if (insertError) {
+            console.error(insertError)
+        }
 
         return {
             success: true,

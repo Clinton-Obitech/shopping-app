@@ -1,9 +1,9 @@
 'use server'
 
-import pool from "@/lib/db";
 import { compare } from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import supabase from "@/lib/supabaseServer";
 
 type FormState = {
   message: string;
@@ -27,14 +27,20 @@ export async function SubmitForm(prevState: any, formData: FormData):  Promise<F
 
     try {
 
-        const { rows } = await pool.query(
-            "SELECT * FROM admin WHERE username = $1",
-            [username]
-        )
+        const { data: admin, error } = await supabase
+        .from('admin')
+        .select('*')
+        .eq('username', username)
+        .single();
 
-        const admin = rows[0];
+        if (error) {
+            return {
+               success: false,
+               message: "something went wrong"
+            }
+        }
 
-        if (!admin || admin.length === 0) {
+        if (!admin) {
             return {
                 success: false,
                 message: "admin does not exists"

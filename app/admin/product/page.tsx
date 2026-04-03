@@ -1,4 +1,3 @@
-import pool from "@/lib/db";
 import Link from "next/link";
 import styles from "../admin.module.css";
 import ManageProducts from "./products";

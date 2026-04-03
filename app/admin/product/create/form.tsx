@@ -23,8 +23,8 @@ export default function Form() {
         <form action={actionState}>
             <select name="category" onChange={(e:React.ChangeEvent<HTMLSelectElement>) => e.target.value}>
             <option>choose category</option>
-            {SelectCategory.map(option => (
-                <option key={option.id} value={option.value}>{option.label}</option>
+            {SelectCategory.map(category => (
+                <option key={category.id} value={category.value}>{category.label}</option>
             ))}
             </select>
 
